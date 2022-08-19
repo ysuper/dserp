@@ -42,6 +42,9 @@ class SqlSrv:
         with open(filename, "w", encoding="utf-8") as file:
             file.write(self.df.to_json(orient="split", force_ascii=False))
 
+    def export_excel(self, filename):
+        self.df.to_excel(filename)
+
 
 if __name__ == "__main__":
     sqlsrv = SqlSrv(db_cfg)

@@ -64,3 +64,7 @@ class COMMON:
             print("Table %s created successfully." % tableName)
         finally:
             dbConnection.close()
+
+    @staticmethod
+    def export_excel(df, filename):
+        df.to_excel(filename)
