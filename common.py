@@ -1,4 +1,4 @@
-from config import db_cfg
+from config import db_cfg, mysql_url
 import pandas as pd
 try:
     from .admmd import ADMMD
@@ -39,9 +39,16 @@ class COMMON:
 
     @staticmethod
     def object_to_float(df, column_list, number):
-        decimal_place = "{:,." + str(number) + "f}"
+        # decimal_place = "{:,." + str(number) + "f}"
+        decimal_place = "{:." + str(number) + "f}"
         for column in column_list:
             df[column] = df[column].map(decimal_place.format)
+        return df
+
+    @staticmethod
+    def object_to_date(df, column_list):
+        for column in column_list:
+            df[column] = pd.to_datetime(df[column]).dt.strftime('%Y-%m-%d')
         return df
 
     @staticmethod
@@ -68,3 +75,19 @@ class COMMON:
     @staticmethod
     def export_excel(df, filename):
         df.to_excel(filename)
+
+
+if __name__ == "__main__":
+    students_data = pd.DataFrame({
+        'Student': ['Samreena', 'Ali', 'Sara', 'Amna', 'Eva'],
+        'marks': [800, 830, 740, 910, 1090],
+        'Grades': ['B+', 'B+', 'B', 'A', 'A+']
+    })
+
+    ##### export_excel
+    # file_name = 'table.xlsx'
+    # COMMON.export_excel(students_data, file_name)
+
+    ##### df_to_mysql
+    tableName = "test"
+    COMMON.df_to_mysql(students_data, mysql_url, tableName)
